@@ -2,11 +2,15 @@
 import java.awt.print.Book;
 import java.util.*;
 
-interface LibrarySystem{
+interface LibrarySystem {
     abstract void addBook(Book book);
+
     abstract void addUser(Users User);
+
     abstract void returnBook(Book book);
+
     Optional<Book> findBook(String title);
+
     Optional<Users> findUser(int userId);
 }
 
