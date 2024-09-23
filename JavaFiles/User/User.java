@@ -1,27 +1,10 @@
-import java.util.Queue;
+import java.util.List;
 
-public class User<T> {
-    private final String id;
-    private final String name;
-    private final String role;
-    private Queue<T> books;
-
-    /*
-    * At first, User object had planned to implemented by
-    * pulling out from somewhere it exists with recognized by id.
-    * But, User object doesn't come out from DB or somewhere.
-    * We cannot pull the value of it, which is name, role, out.
-    * Because it has NO resource of pulling out from.
-    * And I decided make dummy data of user.
-    * Therefore, name, role, should have assigned when it generated.
-    * -- Commented by Jae Min --
-    * */
-    public User(String id, String name, String role, Queue<T> books) {
-        this.id = id;
-        this.name = name;
-        this.role = role;
-        this.books = books;
-    }
+abstract class User<T> {
+    private String id;
+    private String name;
+    private String role;
+    private List<T> books;
 
     public String getId() {
         return id;
@@ -35,11 +18,23 @@ public class User<T> {
         return role;
     }
 
-    public Queue<T> getBook() {
+    public List<T> getBook() {
         return books;
     }
 
-    public void returnBook(T book) {
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setBook(List<T> books) {
+        this.books = books;
     }
 }
