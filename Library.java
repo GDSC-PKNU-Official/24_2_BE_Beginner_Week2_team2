@@ -1,94 +1,108 @@
 
-import java.awt.print.Book;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Library implements LibrarySystem {
+public class Library<T> {
     // 변수 선언부
     private static final String address = "부산 남구 용소로 45";
     private String name; // 도서관 이름
     private List<Book> bookList;
+    private T userContainer;
 
     public Library(String name) {
         this.name = name;
         this.bookList = new ArrayList<>();
     }
 
-    //인터페이스 구현부
-    @Override
-    public void addUser(int userId, String name) {
-        Users.addUser(userId, name);
-    }
-
-    @Override
-    public void removeUser(int userId) {
-        //Users.removeUser(userId);
-    }
-
-    /*
-    @Override
-    public void addBook(Book book, int userId) {
-        if(Users.checkExistUser(userId)) {
-            bookList.add(book);
-            System.out.println(/*book.getTitle() +  "책 추가가 완료");
-        else {
-                // throw new BookNotFoundException("책 추가 실패, 사용자 ID 존재 X");
-        }
-    }
-     */
-    @Override
-    public void addBook(Book book, int userId) throws BookNotFoundException {
-        Optional<Users> user = findUser(userId);
-
-        if(user.isPresent()) {
-            bookList.add(book);
-            System.out.println("책 추가 완료");
-        } else {
-            throw new BookNotFoundException("책 추가 실패, 사용자 ID 존재 X");
-        }
-    }
-
-    @Override
-    public void borrowBook(int userId, String bookTitle) {
-        Optional<Book> book = findBook(bookTitle);
-    }
-
-    @Override
-    public void returnBook(int userId, String bookTitle) {
-
-    }
-
-    @Override
-    public Optional<Book> findBook(String title) {
-        for(Book book : bookList) {
-            if(book.getTitle().equals(title)) { // 왜 못쓰는거지?? 하...
+    //BookNotFoundException 커스텀 예외 클래스에서 예외 처리하기 위한 메서드 작성
+    public Optional<Book> findBook(String title) throws BookNotFoundException {
+        for(Book book : bookList){ // bookList에 생성된 Book 객체 순회.
+            if(book.getTitle().equals(title)) {
                 return Optional.of(book);
             }
         }
-        return Optional.empty();
+        return Optional.empty(); //책 찾지 못했을 때 빈 optional 반환.
     }
 
-    @Override
-    public Optional<Users> findUser(int userId) {
-        return Optional.empty();
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    LibraryController lc = new LibraryController();
+
+    public void showLibraryMemu() throws IOException {
+
+        while(true) {
+            System.out.println("메뉴를 선택하세요.");
+            System.out.println("1. 사용자 등록");
+            System.out.println("2. 사용자 탈퇴");
+            System.out.println("3. 도서 대출");
+            System.out.println("4. 도서 반납");
+            System.out.println("5. 도서 추가");
+            System.out.println("6. 도서 삭제");
+            System.out.println("7. 끝내기");
+            System.out.println("============================");
+            System.out.print("사용할 메뉴 : ");
+
+            int num = Integer.parseInt(br.readLine());
+
+            switch(num) {
+                case 1 :
+
+                    break;
+                case 2 :
+
+                    break;
+                case 3 :
+
+                    break;
+                case 4 :
+
+                    break;
+                case 5 :
+                    bookAdd();
+                    break;
+                case 6 :
+
+                    break;
+                case 7 :
+                    System.out.println("프로그램을 종료합니다.");
+                    return;
+                default :
+                    System.out.println("번호를 다시 입력해주세요.");
+            }
+
+        }
+    }
+    private Book bookAdd() throws IOException {
+        System.out.println("도서 추가");
+        System.out.print("도서명 : ");
+        String title = br.readLine();
+        System.out.print("작가명 : ");
+        String author = br.readLine();
+        //System.out.print("카테고리 : ");
+        //String category = br.readLine();
+        System.out.print("출판사 : ");
+        String publisher = br.readLine();
+        System.out.print("ISBN : ");
+        String ISBN = br.readLine();
+        System.out.print("출판일 : ");
+        String publishDateString = br.readLine();
+        LocalDate publishDate = LocalDate.parse(publishDateString, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        System.out.print("가격 : ");
+        int price = Integer.parseInt(br.readLine());
+
+        // Book 클래스 생성자를 사용해 책 객체 생성
+        Book book = new Book(title, author, publisher, ISBN, publishDate);
+        bookList.add(book);
+        return book;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Library pknuL = new Library("중앙도서관");
-        pknuL.addUser(202112343, "이한응");
-        pknuL.addBook("총 균 쇠", 202112343);
+        pknuL.showLibraryMemu();
 
     }
 }
-class BookNotFoundException extends Exception {
-    //생성자
-    public BookNotFoundException(String msg) {
-        super(msg);
-    }
-}
 
-class UserNotFoundException extends Exception {
-    //생성자
-    public UserNotFoundException(String msg) {
-        super(msg);
-    }
-}
