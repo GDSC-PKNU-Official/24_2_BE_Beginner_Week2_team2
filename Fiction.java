@@ -14,4 +14,3 @@ public class Fiction<T> extends Book<T>{
         System.out.println("Category of Book: " + category);
     }
 }
-
