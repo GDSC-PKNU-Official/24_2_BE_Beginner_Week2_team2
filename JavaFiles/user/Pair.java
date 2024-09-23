@@ -1,3 +1,5 @@
+package user;
+
 public class Pair<T extends Object> {
     private T x;
     private T y;
