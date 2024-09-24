@@ -26,6 +26,30 @@ public class Book<T> {
     public String getTitle() {
         return title;
     }
+
+    public String getIsbn() {
+        return ISBN;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public String getPublishDate() {
+        return publishDate.toString();
+    }
+
+    public void toggleLoaned() {
+        this.isLoaned = !this.isLoaned;
+    }
+
+    public boolean getIsLoaned() {
+        return this.isLoaned;
+    }
 //Getter,Setter
 
     public LocalDate getDueDate() {
