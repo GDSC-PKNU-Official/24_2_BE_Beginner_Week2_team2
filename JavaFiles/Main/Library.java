@@ -1,7 +1,7 @@
 package main;
 
 
-import book.Book;
+import book.*;
 import user.*;
 
 import java.io.BufferedReader;
@@ -12,10 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Library {
-    // 변수 선언부
-    private static final String address = "부산 남구 용소로 45";
-    private final String name = "중앙도서관"; // 도서관 이름
-
+    // 중앙도서관 리터럴이 들어가는 상수명이 name이고 아래에서 findBook을 수행하는 과정의 변수명이 name이라 에러가 났었음.
+    // findBookByIsbn 메소드가 Library에도 BookContainer에도 있어서 에러가 났었음. 추가는 BookContainer에, 찾기는 this.findBook으로 해서 에러, ㅋ.
 
     //BookNotFoundException 커스텀 예외 클래스에서 예외 처리하기 위한 메서드 작성
     public Optional<Book> findBook(String title) throws BookNotFoundException {
@@ -30,7 +28,7 @@ public class Library {
 
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public void showLibraryMemu() throws IOException {
+    public void showLibraryMemu() throws IOException, BookNotFoundException {
 
         while(true) {
             System.out.println("메뉴를 선택하세요.");
@@ -74,18 +72,18 @@ public class Library {
                 case 3 :
                     System.out.println("대출할 도서의 ISBN을 입력하세요");
                     str = br.readLine();
-                    if (BookContainer.findBook(str).getIsLoaned()) {
+                    if (BookContainer.findBookByIsbn(str).getIsLoaned()) {
                         System.out.println("현재 대출 중인 도서입니다.");
                     } else {
-                        BookContainer.lendBook(BookContainer.findBook(str));
+                        BookContainer.lendBook(BookContainer.findBookByIsbn(str));
                         System.out.println("대출이 완료됐습니다.");
                     }
                     break;
                 case 4 :
                     System.out.println("반납할 도서의 ISBN을 입력하세요");
                     str = br.readLine();
-                    if (BookContainer.findBook(str).getIsLoaned()) {
-                        BookContainer.returnBook(BookContainer.findBook(str));
+                    if (BookContainer.findBookByIsbn(str).getIsLoaned()) {
+                        BookContainer.returnBook(BookContainer.findBookByIsbn(str));
                         System.out.println("반납이 완료되었습니다.");
                     } else {
                         System.out.println("대출된 도서가 아닙니다.");
@@ -102,7 +100,14 @@ public class Library {
                     System.out.println("삭제가 완료되었습니다.");
                     break;
                 case 7 :
-
+                    System.out.println("검색할 도서의 제목을 입력하세요");
+                    str = br.readLine();
+                    Book book = BookContainer.findBookByTitle(str);
+                    if (book != null) {
+                        System.out.println(BookContainer.getInfo(book.getIsbn()));
+                    } else {
+                        System.out.println("도서를 찾을 수 없습니다.");
+                    }
                     break;
                 case 8 :
                     System.out.println("프로그램을 종료합니다.");
@@ -126,13 +131,11 @@ public class Library {
         System.out.print("출판일 : ");
         String publishDateString = br.readLine();
         LocalDate publishDate = LocalDate.parse(publishDateString, DateTimeFormatter.ofPattern("yyyyMMdd"));
-        System.out.print("가격 : ");
-        int price = Integer.parseInt(br.readLine());
 
         return new Book(title, author, publisher, ISBN, publishDate);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, BookNotFoundException {
         Library pknuL = new Library();
         pknuL.showLibraryMemu();
     }

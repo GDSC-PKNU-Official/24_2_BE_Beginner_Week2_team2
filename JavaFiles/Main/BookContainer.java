@@ -1,8 +1,8 @@
 package main;
 
 import book.Book;
-import user.Pair;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,12 +11,12 @@ public class BookContainer {
 
     public static String getInfo(String id) {
         Book book = bookMap.get(id);
-        String info = "";
-        info += book.getTitle() + " ";
-        info += book.getAuthor() + " ";
-        info += book.getPublisher() + " ";
-        info += book.getPublishDate() + " ";
-        info += id;
+        String info = "제목: ";
+        info += book.getTitle() + " 작가: ";
+        info += book.getAuthor() + " ISBN: ";
+        info += id + " 출판사: ";
+        info += book.getPublisher() + " 출판일: ";
+        info += book.getPublishDate();
         return info;
     }
 
@@ -28,8 +28,18 @@ public class BookContainer {
         bookMap.remove(isbn);
     }
 
-    public static Book findBook(String isbn) {
+    public static Book findBookByIsbn(String isbn) {
         return bookMap.get(isbn);
+    }
+
+    public static Book findBookByTitle(String title) {
+        Collection<Book> books = bookMap.values();
+        for (Book book : books) {
+            if (book.getTitle().equals(title)) {
+                return book;
+            }
+        }
+        return null;
     }
 
     public static void lendBook(Book book) {
